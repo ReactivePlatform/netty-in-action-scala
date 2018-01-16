@@ -145,7 +145,10 @@ Type to start searching
 <div class="md-content__searchable">
 <h1><a href="#第1章-netty-异步和事件驱动" name="第1章-netty-异步和事件驱动" class="anchor"><span class="anchor-link"></span></a>第1章——Netty——异步和事件驱动</h1>
 <h2><a href="#代码清单-1-1-阻塞-i-o-示例" name="代码清单-1-1-阻塞-i-o-示例" class="anchor"><span class="anchor-link"></span></a>代码清单 1-1 阻塞 I/O 示例</h2>
-<pre class="prettyprint"><code class="language-java">public void serve(int portNumber) throws IOException {
+<dl>
+  <dt>Java</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-java">public void serve(int portNumber) throws IOException {
     //创建一个新的 ServerSocket，用以监听指定端口上的连接请求
     ServerSocket serverSocket = new ServerSocket(portNumber);
     //对accept()方法的调用将被阻塞，直到一个连接建立
@@ -167,7 +170,32 @@ Type to start searching
         out.println(response);
         //继续执行处理循环
     }
-}</code></pre>
+}</code></pre></dd>
+  <dt>Scala</dt>
+  <dd>
+  <pre class="prettyprint"><code class="language-scala">@throws[IOException]
+def serve(portNumber: Int): Unit = {
+  //创建一个新的 ServerSocket，用以监听指定端口上的连接请求
+  val serverSocket = new ServerSocket(portNumber)
+  //对accept()方法的调用将被阻塞，直到一个连接建立
+  val clientSocket = serverSocket.accept
+  //这些流对象都派生于该套接字的流对象
+  val in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream))
+  val out = new PrintWriter(clientSocket.getOutputStream, true)
+  var request: String = in.readLine
+  var response: String = null
+  //处理循环开始
+  while (request ne null) {
+    if (&quot;Done&quot; != request) {
+      //请求被传递给服务器的处理方法
+      response = processRequest(request)
+      //服务器的响应被发送给了客户端
+      out.println(response)
+      //继续执行处理循环
+    }
+    request = in.readLine
+  }</code></pre></dd>
+</dl>
 </div>
 <div>
 <a href="https://github.com/ReactivePlatform/netty-in-action-scala/tree/master/src/paradox/chapter-01/index.md" title="Edit this page" class="md-source-file md-edit">
